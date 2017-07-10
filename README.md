@@ -1,5 +1,7 @@
 # Stock Importer
 
+[![Build Status](https://travis-ci.org/Lai90/StockImporter.svg?branch=master)](https://travis-ci.org/Lai90/StockImporter)
+
 Imports GPW (Warsaw Stock Exchange) stock rates from Bossa.pl.
 
   - Currently only imports todays stock rates
