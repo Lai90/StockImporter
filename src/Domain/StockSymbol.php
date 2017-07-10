@@ -41,8 +41,7 @@ class StockSymbol implements \JsonSerializable
 	public function jsonSerialize()
 	{
 		return [
-			"code" => $this->getCode(),
-			"rates" => $this->getRates(),
+			"rates" => $this->getRatesCollection(),
 			"name" => $this->getName()
 		];
 	}

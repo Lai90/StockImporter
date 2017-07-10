@@ -12,7 +12,6 @@ class StockRateCollection extends AbstractCollection
 		$collection = $this->getCollection();
 		$collection[$rate->getDate()->format("Y-m-d")] = $rate;
 		$this->setCollection($collection);
-		$this->sortRatesByDate();
 	}
 
 	public function getCurrentRate() : StockRate
@@ -23,18 +22,6 @@ class StockRateCollection extends AbstractCollection
 	public function getByDate(\DateTime $date)
 	{
 		return $this->getCollection()[$date->format("Y-m-d")];
-	}
-
-	protected function sortRatesByDate()
-	{
-		$array = $this->getCollection();
-		usort($array, array($this, "compareRatesByDate"));
-		$this->setCollection($array);
-	}
-
-	protected function compareRatesByDate(StockRate $firstRate, StockRate $secondRate) : bool
-	{
-		return ($firstRate->getDate() > $secondRate->getDate());
 	}
 
 	public function merge(StockRateCollection $collection) : self
@@ -48,8 +35,6 @@ class StockRateCollection extends AbstractCollection
 		foreach($collection->getCollection() as $rate) {
 			$newCollection->add($rate);
 		}
-		
-		$this->sortRatesByDate();
 
 		return $newCollection;
 	}

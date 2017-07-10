@@ -46,7 +46,6 @@ class TodaysStockRateImporter extends AbstractStockRateImporter
 
     public function process()
     {
-    	$this->processStreamToArray();
     	$this->processArrayToCollection();
 
         return $this;
