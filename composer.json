@@ -1,0 +1,16 @@
+{
+    "require": {
+        "moneyphp/money": "^3.0"
+    },
+    "require-dev": {
+		"phpspec/phpspec": "^3.4"
+    },
+    "config": {
+    	"bin-dir": "bin"
+    },
+    "autoload": {
+    	"psr-0": {
+    		"": "src/"
+    	}
+    }
+}
