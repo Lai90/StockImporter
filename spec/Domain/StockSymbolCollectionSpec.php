@@ -12,42 +12,52 @@ use Prophecy\Argument;
 
 class StockSymbolCollectionSpec extends ObjectBehavior
 {
+    function let()
+    {
+        $symbol_sp500_yesterday = $this->generateSymbol("ETFSP500", new \DateTime("Yesterday"));
+        $symbol_sp500_today     = $this->generateSymbol("ETFSP500", new \DateTime("Today"));
+        $symbol_wig20           = $this->generateSymbol("ETFWIG20", new \DateTime());
+
+        $this->add($symbol_sp500_today);
+        $this->add($symbol_sp500_yesterday);
+        $this->add($symbol_wig20);
+    }
+
     function it_is_initializable()
     {
         $this->shouldHaveType(StockSymbolCollection::class);
     }
 
-    function it_can_add_and_count_symbols()
-    {
-    	$symbol = $this->generateSymbol("ETFSP500", new \DateTime("Yesterday"));
-        $symbol2 = $this->generateSymbol("ETFSP500", new \DateTime("Today"));
-        $symbol3 = $this->generateSymbol("ETFWIG20", new \DateTime());
-
-    	$this->add($symbol);
-        $this->add($symbol2);
-        $this->add($symbol3);
+    function it_can_count_symbols()
+    {	
     	$this->count()->shouldEqual(2);
     }
 
-    function it_can_get_symbols_by_code()
+    function it_can_add_symbols_without_duplicating()
     {
-        $symbol = $this->generateSymbol("ETFSP500", new \DateTime("Yesterday"));
-        $symbol2 = $this->generateSymbol("ETFSP500", new \DateTime("Today"));
-        $symbol3 = $this->generateSymbol("ETFWIG20", new \DateTime());
+        $symbol_1_yesterday = $this->generateSymbol("SYMBOL_1", new \DateTime("Yesterday"));
+        $symbol_1_today     = $this->generateSymbol("SYMBOL_1", new \DateTime("Today"));
+        $symbol_2           = $this->generateSymbol("SYMBOL_2", new \DateTime());
 
-        $this->add($symbol);
-        $this->add($symbol2);
-        $this->add($symbol3);
+        $this->add($symbol_1_today);
+        $this->add($symbol_1_yesterday);
+        $this->add($symbol_2);
 
-        $symbolMerged = $symbol->merge($symbol2);
+        $symbol_1 = $symbol_1_today->merge($symbol_1_yesterday);
 
-        $this->get("ETFSP500")->shouldBeLike($symbolMerged);
-        $this->get("ETFSP500")->shouldNotBeLike($symbol);
-        $this->get("ETFSP500")->shouldNotBeLike($symbol2);
-        $this->get("ETFWIG20")->shouldBeLike($symbol3);
+        $this->get("SYMBOL_1")->shouldBeLike($symbol_1);
+        $this->get("SYMBOL_1")->shouldNotBeLike($symbol_1_today);
+        $this->get("SYMBOL_1")->shouldNotBeLike($symbol_1_yesterday);
+
+        $this->get("SYMBOL_2")->shouldBeLike($symbol_2);
     }
 
-    function generateSymbol($code, $date)
+    function it_can_get_symbol_by_code()
+    {
+        $this->get("ETFSP500")->shouldBeAnInstanceOf(StockSymbol::class);
+    }
+
+    protected function generateSymbol($code, $date)
     {
 		$valueOpen = Money::PLN(rand(80,100));
 		$valueClose = Money::PLN(rand(80,100));

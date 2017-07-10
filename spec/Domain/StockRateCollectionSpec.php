@@ -20,7 +20,7 @@ class StockRateCollectionSpec extends ObjectBehavior
     	$rate = $this->generateRateWithSetDate(new \DateTime());
 
     	$this->add($rate);
-    	$this->count()->shouldEqual(1);
+    	$this->getCurrentRate()->shouldBeAnInstanceOf(StockRate::class);
     }
 
     function it_can_sort_rates()

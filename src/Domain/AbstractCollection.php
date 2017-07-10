@@ -11,7 +11,7 @@ abstract class AbstractCollection implements \Iterator, \JsonSerializable
 		$this->collection = array();
 	}
 
-	public function getCollection()
+	public function getCollection() : Array
 	{
 		return $this->collection;
 	}
@@ -19,6 +19,8 @@ abstract class AbstractCollection implements \Iterator, \JsonSerializable
     public function setCollection(Array $collection) 
     {
         $this->collection = $collection;
+
+        return $this;
     }
 	
 	public function count() : int
@@ -26,7 +28,7 @@ abstract class AbstractCollection implements \Iterator, \JsonSerializable
 		return count($this->collection);
 	}
 
-	public function jsonSerialize() 
+	public function jsonSerialize()
 	{
 		return $this->collection;
 	}

@@ -25,6 +25,12 @@ $ cd stock-importer
 $ composer install
 ```
 
+### Usage
+
+```sh
+$ php Run.php
+```
+
 ### Todos
 * Add importing of historic stock data
 * Add Firebase integration so data can be sent to Firebase database

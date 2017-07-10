@@ -15,7 +15,7 @@ class StockRateCollection extends AbstractCollection
 		$this->sortRatesByDate();
 	}
 
-	public function getCurrentRate()
+	public function getCurrentRate() : StockRate
 	{
 		return $this->last();
 	}
@@ -37,17 +37,15 @@ class StockRateCollection extends AbstractCollection
 		return ($firstRate->getDate() > $secondRate->getDate());
 	}
 
-	public function merge(StockRateCollection $collection) : StockRateCollection
+	public function merge(StockRateCollection $collection) : self
 	{
-		$newCollection = new StockRateCollection();
+		$newCollection = new self();
 		
-		foreach($this->getCollection() as $rate) 
-		{
+		foreach($this->getCollection() as $rate) {
 			$newCollection->add($rate);
 		}
 		
-		foreach($collection->getCollection() as $rate) 
-		{
+		foreach($collection->getCollection() as $rate) {
 			$newCollection->add($rate);
 		}
 		

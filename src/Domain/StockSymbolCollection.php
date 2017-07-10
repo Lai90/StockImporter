@@ -12,16 +12,8 @@ class StockSymbolCollection extends AbstractCollection
 	{
 		$collection = $this->getCollection();
 		
-		if(array_key_exists($symbol->getCode(), $this->getCollection()))
-		{
-			$rates = clone($symbol->getRatesCollection());
-			foreach($this->get($symbol->getCode())->getRatesCollection() as $rate) {
-				$rates->add($rate);
-			}
-
-			$newSymbol = new StockSymbol($symbol->getCode(), $rates, $symbol->getName());
-
-			$collection[$symbol->getCode()] = $newSymbol;
+		if($this->get($symbol->getCode())) {
+			$collection[$symbol->getCode()] = $this->get($symbol->getCode())->merge($symbol);
 		}
 		else {
 			$collection[$symbol->getCode()] = $symbol;
@@ -33,7 +25,7 @@ class StockSymbolCollection extends AbstractCollection
 	public function get(string $symbol)
 	{
 		if(array_key_exists($symbol, $this->getCollection()) === false) {
-			throw new KeyNotExistException();
+			return false;
 		}
 
 		return $this->getCollection()[$symbol];

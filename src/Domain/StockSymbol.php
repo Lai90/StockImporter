@@ -14,7 +14,7 @@ class StockSymbol implements \JsonSerializable
 
 	public function __construct(string $code, StockRateCollection $rates, string $name = null)
 	{
-		if(!$rates->count()) {
+		if (!$rates->count()) {
 			throw new EmptyException();
 		}
 
@@ -47,15 +47,14 @@ class StockSymbol implements \JsonSerializable
 		];
 	}
 
-	public function merge(StockSymbol $symbol) : StockSymbol
+	public function merge(StockSymbol $symbol) : self
 	{
-		if($symbol->getCode() != $this->getCode())
-		{
+		if($symbol->getCode() != $this->getCode()) {
 			throw new CodeNotMatchingException();
 		}
 
 		$rateCollection = $this->getRatesCollection()->merge($symbol->getRatesCollection());
 
-		return new StockSymbol($this->getCode(), $rateCollection, $this->getName());
+		return new self($this->getCode(), $rateCollection, $this->getName());
 	}
 }
