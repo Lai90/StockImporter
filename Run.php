@@ -1,13 +1,4 @@
 <?php
-$file = "http://bossa.pl/pub/metastock/mstock/sesjaall/sesjaall.prn";
-$handle = fopen($file, 'r') or var_dump("Can't open file!");;
-
-die;
-
-
-
-
-
 require_once(__DIR__.'/vendor/autoload.php');
 
 use Utility\TodaysStockRateImporter;
