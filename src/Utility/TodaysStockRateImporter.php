@@ -44,11 +44,11 @@ class TodaysStockRateImporter extends AbstractStockRateImporter
     	}
     }
 
-    public function process() : StockSymbolCollection
+    public function process()
     {
     	$this->processStreamToArray();
     	$this->processArrayToCollection();
 
-        return $this->getCollection();
+        return $this;
     }
 }

@@ -11,7 +11,7 @@ abstract class AbstractStockRateImporter
     protected $fileStream;
 
 	abstract protected function processArrayToCollection();
-	abstract public function process() : StockSymbolCollection;
+	abstract public function process();
 
     public function __construct(string $fileUrl)
     {
