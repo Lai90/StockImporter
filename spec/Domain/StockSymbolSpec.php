@@ -31,6 +31,18 @@ class StockSymbolSpec extends ObjectBehavior
     	$this->shouldThrow('Domain\Exception\StockRateCollection\EmptyException')->duringInstantiation();
     }
 
+    function it_cannot_be_merged_with_different_code_symbol()
+    {
+        $rates = new StockRateCollection();
+        $rates->add($this->generateRateWithSetDate(new \DateTime()));
+
+        $this->beConstructedWith("SYMBOL_1", $rates);
+
+        $symbol = new StockSymbol("SYMBOL_2", $rates);
+
+        $this->shouldThrow('Domain\Exception\StockSymbol\CodeNotMatchingException')->duringMerge($symbol);
+    }
+
     function generateRateWithSetDate(\DateTime $date)
     {
 		$valueOpen = Money::PLN(rand(80,100));
