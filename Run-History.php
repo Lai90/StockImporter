@@ -6,6 +6,7 @@ use Domain\StockSymbolCollection;
 use Utility\Import\HistoricStockRateImporter;
 use Utility\Export\StockRatesFirebaseExporter;
 use Utility\CsvFileIterator;
+use Respect\Validation\Exceptions\NestedValidationException;
 
 $stockRateFirebaseExporter = new StockRatesFirebaseExporter(__DIR__.'/firebase_credentials.json');
 
@@ -31,8 +32,11 @@ foreach($directory as $file) {
 
 			unlink($file->getPathname());
 		}
+		catch (NestedValidationException $e) {
+			Log::error("Failed to process file - validation error.", array($e->getMessages(), $file->getFilename()));
+		}
 		catch (\Exception $e) {
-			Log::error("Failed to process file.", array($e->getMessage(), $file->getFilename));
+			Log::error("Failed to process file.", array($e->getMessage(), $file->getFilename()));
 		}
 	}
 }

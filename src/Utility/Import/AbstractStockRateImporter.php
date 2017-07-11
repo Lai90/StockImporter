@@ -8,6 +8,8 @@ use Domain\StockRate;
 use Domain\StockSymbol;
 use Money\Money;
 use Utility\CsvFileIterator;
+use Utility\Import\Exception\InvalidDataException;
+use Respect\Validation\Validator as v;
 
 abstract class AbstractStockRateImporter
 {
@@ -19,13 +21,28 @@ abstract class AbstractStockRateImporter
     {
         $this->file = $file;
         $this->symbolCollection = new StockSymbolCollection();
-        $this->processFileToArray();
     }
 
     protected function processFileToArray()
     {
         foreach ($this->file as $data) {
             $this->stockRatesArray[] = $data;
+        }
+    }
+
+    protected function validateArray()
+    {
+        foreach ($this->stockRatesArray as $data) {
+            $validation = v::keySet(
+                v::key(0, v::stringType()),
+                v::key(1, v::date('Ymd')),
+                v::key(2, v::floatVal()),
+                v::key(3, v::floatVal()),
+                v::key(4, v::floatVal()),
+                v::key(5, v::floatVal()),
+                v::key(6, null, false),
+                v::key(7, null, false)
+            )->assert($data);
         }
     }
 
@@ -77,6 +94,8 @@ abstract class AbstractStockRateImporter
 
     public function process()
     {
+        $this->processFileToArray();
+        $this->validateArray();
         $this->processArrayToCollection();
     }
 }

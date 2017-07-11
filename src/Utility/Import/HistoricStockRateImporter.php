@@ -7,9 +7,9 @@ use Utility\CsvFileIterator;
 
 class HistoricStockRateImporter extends AbstractStockRateImporter
 {
-    public function __construct(CsvFileIterator $file)
+    public function processFileToArray()
     {
-        parent::__construct($file);
+        parent::processFileToArray();
 
         unset($this->stockRatesArray[0]);
     }
