@@ -15,12 +15,42 @@ class StockRateCollectionSpec extends ObjectBehavior
         $this->shouldHaveType(StockRateCollection::class);
     }
 
+    function it_can_be_merged_with_another_self()
+    {
+        $rate1 = $this->generateRateWithSetDate(new \DateTime("Today"));
+        $rate2 = $this->generateRateWithSetDate(new \DateTime("Yesterday"));
+
+        $this->add($rate2);
+
+        $collection1 = new StockRateCollection();
+        $collection1->add($rate1);
+        $collection2 = new StockRateCollection();
+        $collection2->add($rate1);
+        $collection2->add($rate2);
+
+        $mergeResult = $this->merge($collection1);
+        
+        $mergeResult->shouldBeAnInstanceOf(StockRateCollection::class);
+        $mergeResult->shouldBeLike($collection2);
+        $mergeResult->shouldNotBeLike($collection1);
+    }
+
     function it_can_add_rates()
     {
     	$rate = $this->generateRateWithSetDate(new \DateTime());
 
     	$this->add($rate);
     	$this->getCurrentRate()->shouldBeAnInstanceOf(StockRate::class);
+    }
+
+    function it_can_get_by_date()
+    {
+        $date = new \DateTime("Yesterday");
+        $rate = $this->generateRateWithSetDate($date);
+
+        $this->add($rate);
+
+        $this->getByDate($date)->shouldEqual($rate);
     }
 
     function it_can_sort_rates()

@@ -1,8 +1,8 @@
 <?php
 require_once(__DIR__.'/vendor/autoload.php');
 
-use Utility\TodaysStockRateImporter;
-use Utility\StockRatesFirebaseExporter;
+use Utility\Import\TodaysStockRateImporter;
+use Utility\Export\StockRatesFirebaseExporter;
 
 $importer = new TodaysStockRateImporter("https://bossa.pl/pub/metastock/mstock/sesjaall/sesjaall.prn");
 $importer->process();

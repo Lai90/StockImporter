@@ -1,26 +1,16 @@
 <?php
 
-namespace Utility;
+namespace Utility\Import\Import;
 
 use Domain\StockRate;
 use Domain\StockSymbol;
 use Domain\StockSymbolCollection;
 use Domain\StockRateCollection;
 use Money\Money;
-use Utility\AbstractStockRateImporter;
+use Utility\Import\AbstractStockRateImporter;
 
 class TodaysStockRateImporter extends AbstractStockRateImporter
 {
-    /**
-     * Processes money values from string float to integer
-     */
-    protected function processRateArray(Array &$array)
-    {
-        for($i = 2; $i <= 5; $i++) {
-            $array[$i] = (int)$array[$i]*100;
-        }
-    }
-
     protected function processArrayToCollection()
     {
     	foreach($this->stockRatesArray as $stockRateArray)

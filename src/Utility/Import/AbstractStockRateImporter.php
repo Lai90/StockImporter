@@ -19,12 +19,14 @@ abstract class AbstractStockRateImporter
         $this->fileUrl = $fileUrl;
         $this->symbolCollection = new StockSymbolCollection();
 
-        if (file_exists($this->getCacheFile()) && (filemtime($this->getCacheFile()) > (time() - 21600))) {
+        if ($this->isFileExternal() && file_exists($this->getCacheFile()) && (filemtime($this->getCacheFile()) > (time() - 21600))) {
             $this->fileStream = fopen($this->getCacheFile(), 'r');
         }
         else {
             $this->fileStream = fopen($this->fileUrl, 'r');
-            file_put_contents($this->getCacheFile(), $this->fileStream);
+            if($this->isFileExternal()) {
+                file_put_contents($this->getCacheFile(), $this->fileStream);
+            }
         }
 
         $this->processStreamToArray();
@@ -40,6 +42,22 @@ abstract class AbstractStockRateImporter
         while (($data = fgetcsv($this->fileStream, 10000, ',')) !== false) {
             $this->stockRatesArray[] = $data;
         }
+    }
+
+    protected function processRateArray(Array &$array)
+    {
+        for($i = 2; $i <= 5; $i++) {
+            $array[$i] = (int)$array[$i]*100;
+        }
+    }
+
+    public function isFileExternal()
+    {
+        if(stristr($this->fileUrl, "http")) {
+            return true;
+        }
+
+        return false;
     }
 
     public function getCacheFile()

@@ -1,6 +1,6 @@
 <?php
 
-namespace Utility;
+namespace Utility\Export;
 
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
