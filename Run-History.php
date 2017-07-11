@@ -15,15 +15,24 @@ $symbolCollection = new StockSymbolCollection();
 
 foreach($directory as $file) {
 	if($file->getExtension() == 'mst') {
-		$csv = new CsvFileIterator($file->getPathname());
+		try {
+			$csv = new CsvFileIterator($file->getPathname());
 
-		Log::info("Processing ".$file->getFilename());
+			Log::info("Processing ".$file->getFilename());
 
-		$importer = new HistoricStockRateImporter($csv);
-		$importer->process();
+			$importer = new HistoricStockRateImporter($csv);
+			$importer->process();
 
-		Log::info("Processed. Saving collection to DB.");
+			Log::info("Processed. Saving collection to DB.");
 
-		$stockRateFirebaseExporter->syncWithDatabase($importer->getCollection(), true);
+			$stockRateFirebaseExporter->syncWithDatabase($importer->getCollection(), true);
+
+			Log::info("Saved. Unlinking file.");
+
+			unlink($file->getPathname());
+		}
+		catch (\Exception $e) {
+			Log::error("Failed to process file.", array($e->getMessage(), $file->getFilename));
+		}
 	}
 }
