@@ -1,6 +1,7 @@
 <?php
 require_once(__DIR__.'/vendor/autoload.php');
 
+use Utility\Log;
 use Domain\StockSymbolCollection;
 use Utility\Import\HistoricStockRateImporter;
 use Utility\Export\StockRatesFirebaseExporter;
@@ -16,12 +17,12 @@ foreach($directory as $file) {
 	if($file->getExtension() == 'mst') {
 		$csv = new CsvFileIterator($file->getPathname());
 
-		echo "Processing ".$file->getFilename()."\n";
-		
+		Log::info("Processing ".$file->getFilename());
+
 		$importer = new HistoricStockRateImporter($csv);
 		$importer->process();
 
-		echo "Processed. Saving collection to DB.\n";
+		Log::info("Processed. Saving collection to DB.");
 
 		$stockRateFirebaseExporter->syncWithDatabase($importer->getCollection());
 	}
