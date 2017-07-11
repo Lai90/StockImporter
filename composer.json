@@ -4,7 +4,8 @@
         "kreait/firebase-php": "^3.0"
     },
     "require-dev": {
-		"phpspec/phpspec": "^3.4"
+		"phpspec/phpspec": "^3.4",
+        "phpunit/phpunit": "^6.1"
     },
     "config": {
     	"bin-dir": "bin"
