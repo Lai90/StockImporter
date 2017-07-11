@@ -31,6 +31,23 @@ class StockSymbolSpec extends ObjectBehavior
     	$this->shouldThrow('Domain\Exception\StockRateCollection\EmptyException')->duringInstantiation();
     }
 
+    function it_can_be_merged_with_matching_code_symbol()
+    {
+        $rates = new StockRateCollection();
+        $rates->add($this->generateRateWithSetDate(new \DateTime()));
+
+        $this->beConstructedWith("SYMBOL_1", $rates);
+
+        $rates2 = new StockRateCollection();
+        $rates2->add($this->generateRateWithSetDate(new \DateTime("Yesterday")));
+
+        $symbol = new StockSymbol("SYMBOL_1", $rates2);
+
+        $symbol_merged = new StockSymbol("SYMBOL_1", $rates->merge($rates2));
+
+        $this->merge($symbol)->shouldBeLike($symbol_merged);
+    }
+
     function it_cannot_be_merged_with_different_code_symbol()
     {
         $rates = new StockRateCollection();
