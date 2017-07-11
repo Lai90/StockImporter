@@ -1,47 +1,71 @@
 <?php
 
-namespace Utility;
+namespace Utility\Import;
 
 use Domain\StockSymbolCollection;
+use Domain\StockRateCollection;
+use Domain\StockRate;
+use Domain\StockSymbol;
+use Money\Money;
+use Utility\CsvFileIterator;
 
 abstract class AbstractStockRateImporter
 {
 	protected $stockRatesArray;
 	protected $symbolCollection;
-    protected $fileStream;
-    protected $fileUrl;
+    protected $file;
 
-	abstract protected function processArrayToCollection();
-	abstract public function process();
-
-    public function __construct(string $fileUrl)
+    public function __construct(CsvFileIterator $file)
     {
-        $this->fileUrl = $fileUrl;
+        $this->file = $file;
         $this->symbolCollection = new StockSymbolCollection();
+        $this->processFileToArray();
+    }
 
-        if ($this->isFileExternal() && file_exists($this->getCacheFile()) && (filemtime($this->getCacheFile()) > (time() - 21600))) {
-            $this->fileStream = fopen($this->getCacheFile(), 'r');
+    protected function processFileToArray()
+    {
+        foreach ($this->file as $data) {
+            $this->stockRatesArray[] = $data;
         }
-        else {
-            $this->fileStream = fopen($this->fileUrl, 'r');
-            if($this->isFileExternal()) {
-                file_put_contents($this->getCacheFile(), $this->fileStream);
-            }
-        }
+    }
 
-        $this->processStreamToArray();
+    protected function processArrayToCollection()
+    {
+        foreach($this->getStockRatesArray() as $stockRateArray)
+        {
+            $rate = $this->createRate($stockRateArray);
+
+            $rateCollection = new StockRateCollection();
+            $rateCollection->add($rate);
+
+            $symbol = new StockSymbol($stockRateArray[0], $rateCollection);
+            $this->symbolCollection->add($symbol);
+        }
+    }
+
+    public function createRate($stockRateArray)
+    {
+        $this->processRateArray($stockRateArray);
+
+        $rate = new StockRate(
+            new \DateTime($stockRateArray[1]),
+            Money::PLN($stockRateArray[2]),
+            Money::PLN($stockRateArray[5]),
+            Money::PLN($stockRateArray[3]),
+            Money::PLN($stockRateArray[4])
+        );
+
+        return $rate;
+    }
+
+    protected function getStockRatesArray()
+    {
+        return $this->stockRatesArray;
     }
 
     public function getCollection()
     {
         return $this->symbolCollection;
-    }
-
-    protected function processStreamToArray()
-    {
-        while (($data = fgetcsv($this->fileStream, 10000, ',')) !== false) {
-            $this->stockRatesArray[] = $data;
-        }
     }
 
     protected function processRateArray(Array &$array)
@@ -51,17 +75,8 @@ abstract class AbstractStockRateImporter
         }
     }
 
-    public function isFileExternal()
+    public function process()
     {
-        if(stristr($this->fileUrl, "http")) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public function getCacheFile()
-    {
-        return __DIR__."/../../var/cache/".basename($this->fileUrl);
+        $this->processArrayToCollection();
     }
 }

@@ -22,6 +22,21 @@ class StockSymbolCollection extends AbstractCollection
 		$this->setCollection($collection);
 	}
 
+	public function merge(StockSymbolCollection $collection) : self
+	{
+		$newCollection = new self();
+		
+		foreach($this->getCollection() as $symbol) {
+			$newCollection->add($symbol);
+		}
+		
+		foreach($collection->getCollection() as $symbol) {
+			$newCollection->add($symbol);
+		}
+
+		return $newCollection;
+	}
+
 	public function get(string $symbol)
 	{
 		if(array_key_exists($symbol, $this->getCollection()) === false) {

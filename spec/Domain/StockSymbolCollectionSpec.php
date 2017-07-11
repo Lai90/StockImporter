@@ -33,6 +33,11 @@ class StockSymbolCollectionSpec extends ObjectBehavior
     	$this->count()->shouldEqual(2);
     }
 
+    function it_can_be_merged_with_another_self()
+    {
+        // todo
+    }
+
     function it_can_add_symbols_without_duplicating()
     {
         $symbol_1_yesterday = $this->generateSymbol("SYMBOL_1", new \DateTime("Yesterday"));

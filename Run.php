@@ -3,8 +3,10 @@ require_once(__DIR__.'/vendor/autoload.php');
 
 use Utility\Import\TodaysStockRateImporter;
 use Utility\Export\StockRatesFirebaseExporter;
+use Utility\CsvFileIterator;
 
-$importer = new TodaysStockRateImporter("https://bossa.pl/pub/metastock/mstock/sesjaall/sesjaall.prn");
+$file = new CsvFileIterator("https://bossa.pl/pub/metastock/mstock/sesjaall/sesjaall.prn");
+$importer = new TodaysStockRateImporter($file);
 $importer->process();
 
 $symbolCollection = $importer->getCollection();
