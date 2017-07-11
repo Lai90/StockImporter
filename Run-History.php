@@ -24,6 +24,6 @@ foreach($directory as $file) {
 
 		Log::info("Processed. Saving collection to DB.");
 
-		$stockRateFirebaseExporter->syncWithDatabase($importer->getCollection());
+		$stockRateFirebaseExporter->syncWithDatabase($importer->getCollection(), true);
 	}
 }

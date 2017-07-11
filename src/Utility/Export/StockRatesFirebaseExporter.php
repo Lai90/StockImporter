@@ -5,6 +5,7 @@ namespace Utility\Export;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\ServiceAccount;
 use Domain\StockSymbolCollection;
+use Utility\Log;
 
 class StockRatesFirebaseExporter
 {
@@ -23,10 +24,15 @@ class StockRatesFirebaseExporter
 		return $this->firebase->getDatabase();
 	}
 
-	public function syncWithDatabase(StockSymbolCollection $collection)
+	public function syncWithDatabase(StockSymbolCollection $collection, bool $onlyNew = false)
 	{
 		foreach($collection as $symbol) {
-			$this->getDb()->getReference('stockSymbols/'.$symbol->getCode())->update($symbol->jsonSerialize());
+			if(!$this->getDb()->getReference('stockSymbols/'.$symbol->getCode())->getSnapshot()->exists()) {
+				$this->getDb()->getReference('stockSymbols/'.$symbol->getCode())->update($symbol->jsonSerialize());
+			}
+			else {
+				Log::info("Skipped symbol ".$symbol->getCode()." - already in database");
+			}
 		}
 	}
 }
