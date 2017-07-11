@@ -1,7 +1,8 @@
 {
     "require": {
         "moneyphp/money": "^3.0",
-        "kreait/firebase-php": "^3.0"
+        "kreait/firebase-php": "^3.0",
+        "monolog/monolog": "^1.23"
     },
     "require-dev": {
 		"phpspec/phpspec": "^3.4",
