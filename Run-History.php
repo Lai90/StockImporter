@@ -18,16 +18,16 @@ foreach($directory as $file) {
 		try {
 			$csv = new CsvFileIterator($file->getPathname());
 
-			Log::info("Processing ".$file->getFilename());
+			Log::info("Started Processing.", array($file->getFilename()));
 
 			$importer = new HistoricStockRateImporter($csv);
 			$importer->process();
 
-			Log::info("Processed. Saving collection to DB.");
+			Log::info("Finished Processing. Saving collection to DB.", array($file->getFilename()));
 
 			$stockRateFirebaseExporter->syncWithDatabase($importer->getCollection(), true);
 
-			Log::info("Saved. Unlinking file.");
+			Log::info("Finished Saving. Unlinking file.", array($file->getFilename()));
 
 			unlink($file->getPathname());
 		}
