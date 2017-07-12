@@ -27,12 +27,7 @@ class StockRatesFirebaseExporter
 	public function syncWithDatabase(StockSymbolCollection $collection, bool $onlyNew = false)
 	{
 		foreach($collection as $symbol) {
-			if(!$this->getDb()->getReference('stockSymbols/'.$symbol->getCode())->getSnapshot()->exists()) {
-				$this->getDb()->getReference('stockSymbols/'.$symbol->getCode())->update($symbol->jsonSerialize());
-			}
-			else {
-				Log::info("Skipped symbol ".$symbol->getCode()." - already in database");
-			}
+			$this->getDb()->getReference('stockSymbols/'.$symbol->getCode())->update($symbol->jsonSerialize());
 		}
 	}
 }

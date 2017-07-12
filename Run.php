@@ -14,8 +14,8 @@ $symbolCollection = $importer->getCollection();
 
 $stockRateFirebaseExporter = new StockRatesFirebaseExporter(__DIR__.'/firebase_credentials.json');
 
-Log::info("Sending today rates to Firebase", array(new \DateTime()->format("Y-m-d")));
+Log::info("Sending today rates to Firebase");
 
 $stockRateFirebaseExporter->syncWithDatabase($symbolCollection);
 
-Log::info("Sending today rates to Firebase finished.", array(new \DateTime()->format("Y-m-d")));
+Log::info("Sending today rates to Firebase finished.");
