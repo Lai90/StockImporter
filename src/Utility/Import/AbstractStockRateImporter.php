@@ -88,7 +88,7 @@ abstract class AbstractStockRateImporter
     protected function processRateArray(Array &$array)
     {
         for($i = 2; $i <= 5; $i++) {
-            $array[$i] = (int)$array[$i]*100;
+            $array[$i] = (int)($array[$i]*100);
         }
     }
 

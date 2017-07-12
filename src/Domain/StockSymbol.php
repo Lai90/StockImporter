@@ -18,6 +18,8 @@ class StockSymbol implements \JsonSerializable
 			throw new EmptyException();
 		}
 
+		$code = $this->processCode($code);
+
 		$this->code = $code;
 		$this->name = $name;
 		$this->rates = $rates;
@@ -55,5 +57,15 @@ class StockSymbol implements \JsonSerializable
 		$rateCollection = $this->getRatesCollection()->merge($symbol->getRatesCollection());
 
 		return new self($this->getCode(), $rateCollection, $this->getName());
+	}
+
+	public function processCode(string $code)
+	{
+		switch ($code) {
+			case "OPONEO.PL":
+				return "OPN";
+			default:
+				return $code;
+		}
 	}
 }
