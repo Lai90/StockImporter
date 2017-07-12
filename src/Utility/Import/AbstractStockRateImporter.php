@@ -85,7 +85,7 @@ abstract class AbstractStockRateImporter
         return $this->symbolCollection;
     }
 
-    protected function processRateArray(Array &$array)
+    protected function processRateArray(array &$array)
     {
         for($i = 2; $i <= 5; $i++) {
             $array[$i] = (int)($array[$i]*100);
