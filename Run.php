@@ -12,10 +12,11 @@ $importer->process();
 
 $symbolCollection = $importer->getCollection();
 
-$stockRateFirebaseExporter = new StockRatesFirebaseExporter(__DIR__.'/firebase_credentials.json');
+var_dump($symbolCollection);
+//$stockRateFirebaseExporter = new StockRatesFirebaseExporter(__DIR__.'/firebase_credentials.json');
 
 Log::info("Sending today rates to Firebase");
 
-$stockRateFirebaseExporter->syncWithDatabase($symbolCollection);
+//$stockRateFirebaseExporter->syncWithDatabase($symbolCollection);
 
 Log::info("Sending today rates to Firebase finished.");
