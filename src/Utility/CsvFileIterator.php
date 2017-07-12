@@ -9,6 +9,7 @@ class CsvFileIterator implements \Iterator
     const CACHE_TTL = 21600;
     const CACHE_MAX_TRIES = 10;
     const CACHE_SLEEP_RETRY = 5;
+
     protected $file;
     protected $fileUrl;
     protected $key = 0;
@@ -20,16 +21,15 @@ class CsvFileIterator implements \Iterator
         $this->fileUrl = $file;
         $this->cacheTries = 0;
 
-
         if($this->isFileExternal() && $this->isCacheStillValid()) {
             $this->openCacheFile();
         }
-        else {
-            $this->openFile();
-            
+        else {            
             if($this->isFileExternal()) {
-                $this->processCache();
-                
+                $this->processCache(); 
+            }
+            else {
+                $this->openFile();
             }
         }
     }
