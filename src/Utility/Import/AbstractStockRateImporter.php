@@ -10,17 +10,21 @@ use Money\Money;
 use Utility\CsvFileIterator;
 use Utility\Import\Exception\InvalidDataException;
 use Respect\Validation\Validator as v;
+use Utility\Import\Exception\RateTooOldException;
+use Utility\Log;
 
 abstract class AbstractStockRateImporter
 {
 	protected $stockRatesArray;
 	protected $symbolCollection;
     protected $file;
+    protected $cutOffDate;
 
-    public function __construct(CsvFileIterator $file)
+    public function __construct(CsvFileIterator $file, \DateTime $cutOffDate = null)
     {
         $this->file = $file;
         $this->symbolCollection = new StockSymbolCollection();
+        $this->cutOffDate = $cutOffDate;
     }
 
     protected function processFileToArray()
@@ -50,18 +54,27 @@ abstract class AbstractStockRateImporter
     {
         foreach($this->getStockRatesArray() as $stockRateArray)
         {
-            $rate = $this->createRate($stockRateArray);
+            try {
+                $rate = $this->createRate($stockRateArray);
 
-            $rateCollection = new StockRateCollection();
-            $rateCollection->add($rate);
+                $rateCollection = new StockRateCollection();
+                $rateCollection->add($rate);
 
-            $symbol = new StockSymbol($stockRateArray[0], $rateCollection);
-            $this->symbolCollection->add($symbol);
+                $symbol = new StockSymbol($stockRateArray[0], $rateCollection);
+                $this->symbolCollection->add($symbol);
+            }
+            catch (RateTooOldException $e) {
+                continue;
+            }
         }
     }
 
     public function createRate($stockRateArray)
     {
+        if (new \DateTime($stockRateArray[1]) < $this->cutOffDate) {
+            throw new RateTooOldException();
+        }
+
         $this->processRateArray($stockRateArray);
 
         $rate = new StockRate(

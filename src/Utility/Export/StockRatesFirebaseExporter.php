@@ -24,9 +24,14 @@ class StockRatesFirebaseExporter
 		return $this->firebase->getDatabase();
 	}
 
-	public function syncWithDatabase(StockSymbolCollection $collection)
+	public function syncWithDatabase(StockSymbolCollection $collection, bool $updateExistingOnly = false)
 	{
 		foreach($collection as $symbol) {
+			if($updateExistingOnly && !$this->getDb()->getReference('stockSymbols/'.$symbol->getCode())->getSnapshot()->exists()) {
+				Log::info("Not saving symbol. It does not exist in database.", array($symbol->getCode()));
+				continue;
+			}
+
 			$this->getDb()->getReference('stockSymbols/'.$symbol->getCode())->update($symbol->jsonSerialize());
 		}
 	}

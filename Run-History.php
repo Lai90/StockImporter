@@ -21,12 +21,12 @@ foreach($directory as $file) {
 
 			Log::info("Started Processing.", array($file->getFilename()));
 
-			$importer = new HistoricStockRateImporter($csv);
+			$importer = new HistoricStockRateImporter($csv, new \DateTime("2017-01-01"));
 			$importer->process();
 
 			Log::info("Finished Processing. Saving collection to DB.", array($file->getFilename()));
 
-			$stockRateFirebaseExporter->syncWithDatabase($importer->getCollection(), true);
+			$stockRateFirebaseExporter->syncWithDatabase($importer->getCollection(), false);
 
 			Log::info("Finished Saving. Unlinking file.", array($file->getFilename()));
 
