@@ -56,6 +56,7 @@ class StockRate implements \JsonSerializable
 	public function jsonSerialize()
 	{
 		return [
+			"date" 		 => $this->getDate()->format("Y-m-d"),
 			"valueOpen"  => $this->getValueOpen()->getAmount(),
 			"valueClose" => $this->getValueClose()->getAmount(),
 			"valueMax" 	 => $this->getValueMax()->getAmount(),
