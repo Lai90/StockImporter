@@ -84,7 +84,7 @@ class CsvFileIterator implements \Iterator
 
     public function validateCacheFile()
     {
-        if(!(exec("file -I ".$this->getCacheFile()) == $this->getCacheFile().": text/plain; charset=us-ascii")) {
+        if(!(exec("file -i ".$this->getCacheFile()) == $this->getCacheFile().": text/plain; charset=us-ascii")) {
             unlink($this->getCacheFile());
             throw new CacheFileInvalidException("Cache file is not text/plain.");
         }
