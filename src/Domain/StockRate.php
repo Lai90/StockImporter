@@ -59,8 +59,7 @@ class StockRate implements \JsonSerializable
 			"valueOpen"  => $this->getValueOpen()->getAmount(),
 			"valueClose" => $this->getValueClose()->getAmount(),
 			"valueMax" 	 => $this->getValueMax()->getAmount(),
-			"valueMin" 	 => $this->getValueMin()->getAmount(),
-			"currency"   => $this->getValueOpen()->getCurrency()
+			"valueMin" 	 => $this->getValueMin()->getAmount()
 		];
 	}
 }
