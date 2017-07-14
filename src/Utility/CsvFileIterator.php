@@ -74,6 +74,7 @@ class CsvFileIterator implements \Iterator
         catch (CacheFileInvalidException $e) {
             if($this->cacheTries < self::CACHE_MAX_TRIES) {
                 sleep(self::CACHE_SLEEP_RETRY);
+                $this->cacheTries++;
                 $this->processCache();
             }
             else {
